@@ -1,24 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-     <script src ="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+     
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <div id="app">
-        <p>Subject: {{ lesson.Subject }}</p>
-        <p>Lesson ID: {{ lesson.Id }}</p>
-        <p>Location: {{ lesson.Location }}</p>
-        <p>Price: {{ lesson.Price }}</p>
-        <p>Availability: {{ lesson.Availability }}</p>
-        <button v-on:click="addToCart()" :disabled="!canAddToCart()">Add to Cart</button>
-
+        <h1 class="heading">Lesson Booking</h1>
+        <button @click="toggleCart" :disabled="">Checkout ({{ numberOfItems }})</button>
         
-        <img v-bind:src="lesson.Image" alt="{{ lesson.ImageAlt }}">
+        <main>
+            <div v-if="displayCart">
+                <h2>Shopping Cart</h2>
+            </div>
 
+            <div v-else>
+                <div v-for="lesson in lessons">
+                    <h2>{{ lesson.Subject }}</h2>
+                     <img v-bind:src="lesson.Image" :alt="lesson.ImageAlt">
+                    <p>Lesson ID: {{ lesson.Id }}</p>
+                    <p>Location: {{ lesson.Location }}</p>
+                    <p>Price: {{ lesson.Price }}</p>
+                    <p>Availability: {{ lesson.Availability }}</p>
+                    <button v-on:click="addToCart(lesson)" :disabled="!canAddToCart(lesson)">Add to Cart</button>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script type="module">
@@ -26,31 +40,58 @@
         const app = createApp({
             data() {
                 return {
-                    lesson: {
-                        Subject: "Computer Science",
-                        Id:2005,
-                        Location: "Hendon",
-                        Price: "£60",
-                        Availability: 15,
-                        Image: "images/cs.img.jpg",
-                        ImageAlt: "Computer Science"
-                    },
-                    cart: []
-                }
+                    lessons: [
+                        {
+                            Subject: "Computer Science",
+                            Id: 2005,
+                            Location: "Hendon",
+                            Price: "£60",
+                            Availability: 5,
+                            Image: "images/cs.img.jpg",
+                            ImageAlt: "Computer Science"
+                        },
+                        {
+                            Subject: "Maths",
+                            Id: 2006,
+                            Location: "Hendon",
+                            Price: "£55",
+                            Availability: 7,
+                            Image: "images/math.webp",
+                            ImageAlt: "Maths"
+                        },
+                        {
+                            Subject: "English",
+                            Id: 2007,
+                            Location: "Hendon",
+                            Price: "£50",
+                            Availability: 5,
+                            Image: "images/english.webp",
+                            ImageAlt: "English"
+                        }
+
+                    ],
+                    cart: [],
+                    displayCart: false
+                };
             },
             methods: {
-                addToCart() {
-                    this.cart.push(this.lesson.id);
-                    this.lesson.Availability = this.lesson.Availability - 1;
-                }
+                addToCart(lesson) {
+                    this.cart.push(lesson.Id);
+                    lesson.Availability -= 1;
+                },
+                canAddToCart(lesson) {
+                    return lesson.Availability > 0;
+                },
             },
             computed: {
-                canAddToCart:function() {
-                    return this.lesson.Availability > 0;
+                numberOfItems: function() {
+                    return this.cart.length;
                 }
             }
-        })
-        app.mount('#app');   
+        });
+
+        app.mount('#app');
     </script>
 </body>
+
 </html>
