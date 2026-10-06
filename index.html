@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <script src ="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <div id="app">
+        <p>Subject: {{ lesson.Subject }}</p>
+        <p>Lesson ID: {{ lesson.Id }}</p>
+        <p>Location: {{ lesson.Location }}</p>
+        <p>Price: {{ lesson.Price }}</p>
+        <p>Availability: {{ lesson.Availability }}</p>
+        <button v-on:click="addToCart()" :disabled="!canAddToCart()">Add to Cart</button>
+
+        
+        <img v-bind:src="lesson.Image" alt="{{ lesson.ImageAlt }}">
+
+    </div>
+
+    <script type="module">
+        const { createApp } = Vue;
+        const app = createApp({
+            data() {
+                return {
+                    lesson: {
+                        Subject: "Computer Science",
+                        Id:2005,
+                        Location: "Hendon",
+                        Price: "£60",
+                        Availability: 15,
+                        Image: "images/cs.img.jpg",
+                        ImageAlt: "Computer Science"
+                    },
+                    cart: []
+                }
+            },
+            methods: {
+                addToCart() {
+                    this.cart.push(this.lesson.id);
+                    this.lesson.Availability = this.lesson.Availability - 1;
+                }
+            },
+            computed: {
+                canAddToCart:function() {
+                    return this.lesson.Availability > 0;
+                }
+            }
+        })
+        app.mount('#app');   
+    </script>
+</body>
+</html>
