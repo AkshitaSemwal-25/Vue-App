@@ -2,34 +2,54 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lesson Booking</title>
     <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
-     
+
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <div id="app">
+
+
         <h1 class="heading">Lesson Booking</h1>
-        <button @click="toggleCart" :disabled="">Checkout ({{ numberOfItems }})</button>
-        
+
+
+        <button class="checkout-button" @click="toggleCart">Checkout ({{ numberOfItems }})</button>
+
         <main>
-            <div v-if="displayCart">
-                <h2>Shopping Cart</h2>
+
+            <div v-if="displayCart" class="cart-section">
+                <h2 class="cart-heading">Shopping Cart</h2>
+                <p>First Name: <input type="text" v-model="order.name"></p>
+                <p>Telephone: <input type="text" v-model="order.telephone"></p>
+                <button class="checkout-button" :disabled="!EnterRequiredDetails"
+                    @click="alertCheckout()">Checkout</button>
             </div>
 
-            <div v-else>
-                <div v-for="lesson in lessons">
-                    <h2>{{ lesson.Subject }}</h2>
-                     <img v-bind:src="lesson.Image" :alt="lesson.ImageAlt">
-                    <p>Lesson ID: {{ lesson.Id }}</p>
-                    <p>Location: {{ lesson.Location }}</p>
-                    <p>Price: {{ lesson.Price }}</p>
-                    <p>Availability: {{ lesson.Availability }}</p>
-                    <button v-on:click="addToCart(lesson)" :disabled="!canAddToCart(lesson)">Add to Cart</button>
+            <div v-else class="lessons-container">
+
+                <div v-for="lesson in lessons" class="lesson-card">
+
+                    <img class="lesson-image" v-bind:src="lesson.Image" :alt="lesson.ImageAlt">
+
+                    <div class="lesson-details">
+
+                        <h2 class="lesson-subject">{{ lesson.Subject }}</h2>
+                        <div class="lesson-info">
+                            <p>Lesson ID:{{ lesson.Id }}</p>
+                            <p>Location:{{ lesson.Location }}</p>
+                            <p>Price:{{ lesson.Price }}</p>
+                            <p>Availability:{{ lesson.Availability }}</p>
+                        </div>
+                        <button class="add-button" v-on:click="addToCart(lesson)" :disabled="!canAddToCart(lesson)">Add
+                            to Cart</button>
+                    </div>
                 </div>
             </div>
         </main>
@@ -40,39 +60,18 @@
         const app = createApp({
             data() {
                 return {
-                    lessons: [
-                        {
-                            Subject: "Computer Science",
-                            Id: 2005,
-                            Location: "Hendon",
-                            Price: "£60",
-                            Availability: 5,
-                            Image: "images/cs.img.jpg",
-                            ImageAlt: "Computer Science"
-                        },
-                        {
-                            Subject: "Maths",
-                            Id: 2006,
-                            Location: "Hendon",
-                            Price: "£55",
-                            Availability: 7,
-                            Image: "images/math.webp",
-                            ImageAlt: "Maths"
-                        },
-                        {
-                            Subject: "English",
-                            Id: 2007,
-                            Location: "Hendon",
-                            Price: "£50",
-                            Availability: 5,
-                            Image: "images/english.webp",
-                            ImageAlt: "English"
-                        }
-
-                    ],
+                    lessons: [],
                     cart: [],
-                    displayCart: false
+                    displayCart: false,
+                    order: {
+                        name: '',
+                        telephone: ''
+                    }
+
                 };
+            },
+            created() {
+                this.fetchData();
             },
             methods: {
                 addToCart(lesson) {
@@ -82,16 +81,38 @@
                 canAddToCart(lesson) {
                     return lesson.Availability > 0;
                 },
+                toggleCart() {
+                    this.displayCart = !this.displayCart;
+
+                },
+                alertCheckout() {
+                    alert("Order placed successfully! Thank you for your purchase.");
+                    this.cart = [];
+                },
+
+                async fetchData() {
+                    const url = "http://localhost:3000/";
+                    let response = await (fetch(url));
+                    this.lessons = await response.json();
+                },
+
             },
             computed: {
-                numberOfItems: function() {
+                numberOfItems: function () {
                     return this.cart.length;
+                },
+                EnterRequiredDetails() {
+                    return this.order.name != "" && this.order.telephone != "";
+                },
+                canShowCart() {
+                    return this.cart.length > 0;
                 }
             }
-        });
-
+        }
+        );
         app.mount('#app');
     </script>
+
 </body>
 
 </html>
