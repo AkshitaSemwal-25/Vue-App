@@ -22,7 +22,7 @@ body {
     margin: 0;
     padding: 25px;
     text-align: center;
-    background-color: #d96b8a;
+    background-color: #851b39;
     color: white;
     font-size: 30px;
     font-weight: 600;
@@ -33,17 +33,17 @@ body {
    Checkout Button
 ============================== */
 
-.checkout-button {
-    display: block;
+.checkout-button, .sorting-button {
     margin: 25px auto;
     padding: 11px 25px;
-    background-color: #e88ba5;
+    background-color: #851b39;
     color: white;
     border: none;
     border-radius: 7px;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
+    margin-left: 10px;
 }
 
 .checkout-button:hover {
@@ -105,8 +105,9 @@ main {
     border: 1px solid #f0d5dd;
     border-radius: 12px;
     box-shadow: 0 3px 10px rgba(180, 90, 120, 0.08);
-    min-height: 390px;
+    min-height: 100px;
     transition: 0.2s;
+    margin-top: 20px
 }
 
 .lesson-card:hover {
@@ -180,7 +181,7 @@ main {
     width: 100%;
     margin-top: 15px;
     padding: 10px;
-    background-color: #e88ba5;
+    background-color:#851b39;
     color: white;
     border: none;
     border-radius: 6px;
@@ -190,7 +191,7 @@ main {
 }
 
 .add-button:hover {
-    background-color: #d96b8a;
+    background-color:#851b39;
 }
 
 .add-button:disabled {
