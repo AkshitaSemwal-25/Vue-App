@@ -77,7 +77,7 @@
     </div>
 
     <script type="module">
-        const URL = "http://localhost:3000";
+        const URL = "https://m01038587-server.onrender.com";
         const { createApp } = Vue;
         const app = createApp({
             data() {
@@ -157,7 +157,7 @@
                         Availability: lesson.Availability
                     };
 
-                    const url = "http://localhost:3000/lessons/" + lesson._id;
+                    const url = URL + "/lessons/" + lesson._id;
                     const options = {
                         method: 'PUT',
                         headers: {
