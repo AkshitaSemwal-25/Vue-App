@@ -131,6 +131,11 @@
                             });
                         const result = await response.json();
                         if (response.ok) {
+                            const contents = Object.values(this.displayLessons());
+
+                            for (const item of contents) {
+                                await this.updateLessons(item.lesson);
+                            }
                             alert("Thank you for your order, " + this.order.name + ". We will contact you on " + this.order.telephone);
                             // Restore lesson availability 
                             this.cart.forEach(lesson => { lesson.Availability += 1; });
@@ -145,6 +150,22 @@
                     catch (error) {
                         console.error("Error sending order:", error);
                     }
+                },
+
+                async updateLessons(lesson) {
+                    let updateBody = {
+                        Availability: lesson.Availability
+                    };
+
+                    const url = "http://localhost:3000/lessons/" + lesson._id;
+                    const options = {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updateBody)
+                    }
+                    let response = await (fetch (url, options));
                 },
                 displayLessons() {
                     const lessonCounts = {};
